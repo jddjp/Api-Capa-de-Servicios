@@ -6,6 +6,7 @@ using System.Text;
 using Api_Capa_de_Servicios.Models.InputData;
 using Api_Capa_de_Servicios.Models.InputData.Cotizacion;
 using Api_Capa_de_Servicios.Models.InputData.OutputData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Originacion.Models.Catalogos;
@@ -17,6 +18,7 @@ using Originacion.Models.Personas;
 
 namespace Api_Capa_de_Servicios.Controllers
 {
+    [Authorize]
     [Route("WSOriginacion/[controller]")]
     [ApiController]
     public class SimuladorController : ControllerBase
@@ -60,8 +62,9 @@ namespace Api_Capa_de_Servicios.Controllers
         /// <remarks>
         /// Buscar personas que cumplan con los parametros de entrada 
         /// </remarks>
+        ///  /// <response code="401">Usuario No Ahutenticado </response>
         /// <response code="200">OK. Devuelve el objeto solicitado.</response>
-       /// <response code="501">Error Verificar Informacion de Entrada</response>  
+        /// <response code="501">Error Verificar Informacion de Entrada</response>  
         [HttpPost("GetListPersonas")]
         public IActionResult Get(Models.InputData.Persona buscaPersona)
         {
@@ -622,6 +625,8 @@ namespace Api_Capa_de_Servicios.Controllers
         [HttpPost("SaveCotizacion")]
         public IActionResult GetEstatusGuardarCotizacion( )
         {
+
+
             return StatusCode(200);
         }
 

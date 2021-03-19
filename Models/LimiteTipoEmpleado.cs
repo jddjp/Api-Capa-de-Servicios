@@ -19,6 +19,7 @@ namespace Originacion.Models
         public float Monto_Max { get; set; }
         public int Plazo_Min { get; set; }
         public int  Plazo_Max { get; set; }
+        
 
     }
 }
