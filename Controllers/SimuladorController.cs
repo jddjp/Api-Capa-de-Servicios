@@ -38,9 +38,9 @@ namespace Api_Capa_de_Servicios.Controllers
              List<ItemListaSolicitudes> listaItemListaCotizaciones = new List<ItemListaSolicitudes>();
 
             HttpClient httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("https://originacion.aprecia.com.mx:9201/");
+            httpClient.BaseAddress = new Uri("http://34.121.231.100:9003");
            
-            var request = httpClient.GetAsync("Home/getListaCotizaciones/").Result;
+            var request = httpClient.GetAsync("/Originacion/getListaCotizaciones?idUsuario="+idUsuario.ToString()).Result;
             if (request.IsSuccessStatusCode)
             {
                 var resulString = request.Content.ReadAsStringAsync().Result;
@@ -183,7 +183,27 @@ namespace Api_Capa_de_Servicios.Controllers
         public IActionResult GetConveniosUsuario( int IdUsuario)
         {
             List<Convenio> listaConvenios = new List<Convenio>();
-            return Ok();
+
+            HttpClient httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("multipart/form-data"));
+            MultipartFormDataContent data = new MultipartFormDataContent();
+            data.Add(new StringContent(IdUsuario.ToString()), "IdUsuario");
+           
+            var request = httpClient.PostAsync("http://34.121.231.100:9003/Convenios/ConveniosListaXusuario", data).Result;
+
+            if (request.IsSuccessStatusCode)
+            {
+                var resulString = request.Content.ReadAsStringAsync().Result;
+                listaConvenios = JsonConvert.DeserializeObject<List<Convenio>>(resulString);
+                return StatusCode(200, listaConvenios);
+            }
+            else
+            {
+                return StatusCode(501);
+            }
+
+ 
         }
 
         /// <summary>
@@ -238,7 +258,24 @@ namespace Api_Capa_de_Servicios.Controllers
         public IActionResult GetFinalidadCredito()
         {
             List<FinalidadCredito> listaFinalidadCredito = new List<FinalidadCredito>();
-            return StatusCode(200, listaFinalidadCredito);
+
+
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri("http://34.121.231.100:9003");
+
+            var request = httpClient.GetAsync("/Convenios/getFinalidadCredito").Result;
+            if (request.IsSuccessStatusCode)
+            {
+                var resulString = request.Content.ReadAsStringAsync().Result;
+
+                listaFinalidadCredito = JsonConvert.DeserializeObject<List<FinalidadCredito>>(resulString);
+                return StatusCode(200, listaFinalidadCredito);
+            }
+            else
+            {
+                return StatusCode(501);
+            }
+          
         }
 
         /// <summary>
@@ -599,6 +636,9 @@ namespace Api_Capa_de_Servicios.Controllers
             data.Add(new StringContent(extraeOfertas.Fecha_Limite.ToString("yyyy-MM-dd")), "vFecha_Limite");
             data.Add(new StringContent(extraeOfertas.Num_Cuotas_Max.ToString()), "vNum_Cuotas_Max");
 
+            data.Add(new StringContent(extraeOfertas.vIdConvenio.ToString()), "vIdConvenio");
+            data.Add(new StringContent(extraeOfertas.vIdTipoEmpleado.ToString()), "vIdTipoEmpleado");
+
             var request = httpClient.PostAsync("https://originacion.aprecia.com.mx:9201/Cotiza/getOfertas/",data).Result;
             if (request.IsSuccessStatusCode)
             {
@@ -641,7 +681,7 @@ namespace Api_Capa_de_Servicios.Controllers
         [HttpDelete("DeleteCotizacion/{IdCotizacion}")]
         public IActionResult DeleteCotizacionByID(int IdCotizacion)
         {
-            return StatusCode(200);
+            return StatusCode(200,"Se Elimino la Cotizacion");
         }
 
 
