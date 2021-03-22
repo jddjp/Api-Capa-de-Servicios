@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using Api_Capa_de_Servicios.Models.InputData.Solicitud;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Newtonsoft.Json;
 using Originacion.Models.Catalogos.CatalogosDomicilios;
 using Originacion.Models.Catalogos.CatalogosPersona;
+using Originacion.Models.Cotizacion;
 using Originacion.Models.Personas;
 using Originacion.Models.Solicitudes;
 
@@ -31,11 +33,30 @@ namespace Api_Capa_de_Servicios.Controllers
         /// Consolida una Solicitud respecto a la Cotizacion Almacenada
         /// </remarks>
         /// <response code="200">OK</response>
-        [HttpGet("CreteSolicitudByIdCotizacion")]
+        [HttpPost("CreteSolicitudByIdCotizacion")]
         public ActionResult CreateSolicitud(SolicitudMigracion solicitudMigracion)
         {
             SolicitudMigracion resSolicitudMigracion = new SolicitudMigracion();
-            return StatusCode(200, resSolicitudMigracion);
+
+            HttpClient httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("multipart/form-data"));
+
+            
+            var content = new StringContent(JsonConvert.SerializeObject(solicitudMigracion).ToString(), Encoding.UTF8, "application/json");
+
+            var request = httpClient.PostAsync("http://34.121.231.100:9003/APISolicitudes/postMigraCotizacion", content).Result;
+            if (request.IsSuccessStatusCode)
+            {
+                var resulString = request.Content.ReadAsStringAsync().Result;
+                resSolicitudMigracion = JsonConvert.DeserializeObject<SolicitudMigracion>(resulString);
+                return StatusCode(200, resSolicitudMigracion);
+            }
+            else
+            {
+                return StatusCode(501);
+            }
+
         }
 
         /// <summary>
@@ -48,9 +69,26 @@ namespace Api_Capa_de_Servicios.Controllers
         [HttpGet("GetListSolicitudes")]
         public  IActionResult GetSolicitudes(int idUsuario)
         {
-            SolicitudLista listaSolicitudes = new SolicitudLista();
+           
+            List<ItemListaSolicitudes> listaItemListaCotizaciones = new List<ItemListaSolicitudes>();
 
-            return Ok(listaSolicitudes);
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri("http://34.121.231.100:9003");
+
+            var request = httpClient.GetAsync("/APISolicitudes/getListaSolicitudes?idUsuario=" + idUsuario.ToString()).Result;
+            if (request.IsSuccessStatusCode)
+            {
+                var resulString = request.Content.ReadAsStringAsync().Result;
+
+               // listaItemListaCotizaciones = JsonConvert.DeserializeObject<List<ItemListaSolicitudes>>(resulString);
+                return StatusCode(200, resulString);
+            }
+            else
+            {
+                return StatusCode(501);
+            }
+
+         
         }
 
         
@@ -67,7 +105,24 @@ namespace Api_Capa_de_Servicios.Controllers
         {
             Solicitud solicitud = new Solicitud();
 
-            return StatusCode(200,solicitud);
+
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri("http://34.121.231.100:9003");
+
+            var request = httpClient.GetAsync("/APISolicitudes/getSolicitud?idSolicitud=" + IdSolicitud.ToString()).Result;
+            if (request.IsSuccessStatusCode)
+            {
+                var resulString = request.Content.ReadAsStringAsync().Result;
+
+                solicitud = JsonConvert.DeserializeObject<Solicitud>(resulString);
+                return StatusCode(200, solicitud);
+            }
+            else
+            {
+                return StatusCode(501);
+            }
+
+         
         }
 
 
@@ -152,8 +207,8 @@ namespace Api_Capa_de_Servicios.Controllers
             if (request.IsSuccessStatusCode)
             {
                 var resulString = request.Content.ReadAsStringAsync().Result;
-                edoRegion = JsonConvert.DeserializeObject<List<EdoRegion>>(resulString);
-                return StatusCode(200, edoRegion);
+               // edoRegion = JsonConvert.DeserializeObject<List<EdoRegion>>(resulString);
+                return StatusCode(200, resulString);
             }
             else
             {

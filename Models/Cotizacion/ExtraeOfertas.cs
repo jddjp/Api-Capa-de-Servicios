@@ -25,5 +25,8 @@ namespace Originacion.Models.Cotizacion
 		public double Importe_Max { get; set; }
 		public DateTime Fecha_Limite { get; set; }
 		public int Num_Cuotas_Max { get; set; }
+		public string vIdConvenio { get; set; }
+		public string vIdTipoEmpleado { get; set; }
+
 	}
 }
