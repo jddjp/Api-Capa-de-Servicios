@@ -240,8 +240,8 @@ namespace Api_Capa_de_Servicios.Controllers
             if (request.IsSuccessStatusCode)
             {
                 var resulString = request.Content.ReadAsStringAsync().Result;
-                municipio = JsonConvert.DeserializeObject<List<Municipio>>(resulString);
-                return StatusCode(200, municipio);
+               // municipio = JsonConvert.DeserializeObject<List<Municipio>>(resulString);
+                return StatusCode(200, resulString);
             }
             else
             {
@@ -273,8 +273,8 @@ namespace Api_Capa_de_Servicios.Controllers
             if (request.IsSuccessStatusCode)
             {
                 var resulString = request.Content.ReadAsStringAsync().Result;
-                colonia = JsonConvert.DeserializeObject<List<Colonia>>(resulString);
-                return StatusCode(200, colonia);
+               // colonia = JsonConvert.DeserializeObject<List<Colonia>>(resulString);
+                return StatusCode(200, resulString);
             }
             else
             {
