@@ -13,7 +13,7 @@ namespace Api_Capa_de_Servicios.Models.InputData.Solicitud
         public string Segundo_Nombre { get; set; }
         public string Primer_Paterno { get; set; }
         public string Segundo_Apellido { get; set; }
-        public DateTime? Fecha_Nacimiento { get; set; }
+        public string? Fecha_Nacimiento { get; set; }
         public string Lugar_Nacimiento { get; set; }
         public int cod_Pais_Origen { get; set; }
         public int Cod_Pais_Nacimiento { get; set; }
@@ -25,11 +25,11 @@ namespace Api_Capa_de_Servicios.Models.InputData.Solicitud
         public string Cod_Edo_Ocupacion { get; set; }
         public string Cod_Sit_Economica { get; set; }
         public int Dep_Economicos { get; set; }
-        public DateTime? Fecha_Defuncion { get; set; }
+        public string? Fecha_Defuncion { get; set; }
         public int Id_Suc_Reqistro { get; set; }
-        public DateTime? Fecha_Alta { get; set; }
-        public DateTime? Fecha_Modificacion { get; set; }
-        public DateTime? Fecha_Residencia { get; set; }
+        public string? Fecha_Alta { get; set; }
+        public string? Fecha_Modificacion { get; set; }
+        public string? Fecha_Residencia { get; set; }
         public string Cod_Situacion_Domicilio { get; set; }
         public string Alias { get; set; }
         public string Cod_Tipo_Ident_Pref { get; set; }

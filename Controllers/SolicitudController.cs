@@ -140,6 +140,7 @@ namespace Api_Capa_de_Servicios.Controllers
         {
             DatosPersonalesPersona datosPersonalesPersona = new DatosPersonalesPersona();
           
+
             HttpClient httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("multipart/form-data"));
@@ -150,7 +151,8 @@ namespace Api_Capa_de_Servicios.Controllers
             data.Add(new StringContent(persona.Segundo_Nombre), "segundo_Nombre");
             data.Add(new StringContent(persona.Primer_Paterno), "primer_Paterno");
             data.Add(new StringContent(persona.Segundo_Apellido), "segundo_Apellido");
-            data.Add(new StringContent(persona.Fecha_Nacimiento.ToString()), "fecha_Nacimiento");
+
+            data.Add(new StringContent(persona.Fecha_Nacimiento),"fecha_Nacimiento");
             data.Add(new StringContent(persona.cod_Pais_Origen.ToString()), "cod_Pais_Origen");
             data.Add(new StringContent(persona.Cod_Pais_Nacimiento.ToString()), "cod_Pais_Nacimiento");
             data.Add(new StringContent(persona.Cod_Nivel_Estudios), "cod_Nivel_Estudios");
@@ -161,11 +163,11 @@ namespace Api_Capa_de_Servicios.Controllers
             data.Add(new StringContent(persona.Cod_Edo_Ocupacion), "cod_Edo_Ocupacion");
             data.Add(new StringContent(persona.Cod_Sit_Economica), "cod_Sit_Economica");
             data.Add(new StringContent(persona.Dep_Economicos.ToString()), "dep_Economicos");
-            data.Add(new StringContent(persona.Fecha_Defuncion.ToString()), "fecha_Defuncion");
+            data.Add(new StringContent(persona.Fecha_Defuncion), "fecha_Defuncion");
             data.Add(new StringContent(persona.Id_Suc_Reqistro.ToString()), "id_Suc_Reqistro");
             data.Add(new StringContent(persona.Fecha_Alta.ToString()), "fecha_Alta");
-            data.Add(new StringContent(persona.Fecha_Modificacion.ToString()), "fecha_Modificacion");
-            data.Add(new StringContent(persona.Fecha_Residencia.ToString()), "fecha_Residencia");
+            data.Add(new StringContent(DateTime.Now.ToString()), "fecha_Modificacion");
+            data.Add(new StringContent(persona.Fecha_Residencia), "fecha_Residencia");
             data.Add(new StringContent(persona.Cod_Situacion_Domicilio.ToString()), "cod_Situacion_Domicilio");
             data.Add(new StringContent(persona.Alias.ToString()), "alias");
             data.Add(new StringContent(persona.Cod_Tipo_Ident_Pref.ToString()), "cod_Tipo_Ident_Pref");
@@ -173,7 +175,7 @@ namespace Api_Capa_de_Servicios.Controllers
             data.Add(new StringContent(persona.Cod_ECV_Persona.ToString()), "cod_ECV_Persona");
             data.Add(new StringContent(persona.IdNacionalidad.ToString()), "idNacionalidad");
         
-            var request = httpClient.PostAsync("https://originacion.aprecia.com.mx:9201/Solicitudes/GuardaPersona/", data).Result;
+            var request = httpClient.PostAsync("https://originacion.aprecia.com.mx:9201/Solicitudes/GuardaPersona/",data).Result;
             if (request.IsSuccessStatusCode)
             {
                 var resulString = request.Content.ReadAsStringAsync().Result;

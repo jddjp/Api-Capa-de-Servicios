@@ -35,25 +35,6 @@ namespace Api_Capa_de_Servicios
             services.AddControllers();
 
 
-            //var key = Encoding.ASCII.GetBytes(Configuration.GetValue<string>("Key"));
-            //services.AddAuthentication(x =>
-            //{
-            //    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-            //}).AddJwtBearer(x =>
-            //{
-            //    x.RequireHttpsMetadata = false;
-            //    x.SaveToken = true;
-            //    x.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidateIssuerSigningKey = true,
-            //        IssuerSigningKey = new SymmetricSecurityKey(key),
-            //        ValidateIssuer = false,
-            //        ValidateAudience = false
-            //    };
-            //});
-
 
             //Swagger 
             AddSwagger(services);
@@ -125,11 +106,8 @@ namespace Api_Capa_de_Servicios
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = Configuration["Jwt:Issuer"],
                     ValidAudience = Configuration["Jwt:Issuer"],
-
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])) //Configuration["JwtToken:SecretKey"]  
                 };
-
-
             });
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -139,6 +117,8 @@ namespace Api_Capa_de_Servicios
             {
                 app.UseDeveloperExceptionPage();
             }
+
+
             //Swagger para  personalizar 
             app.UseStaticFiles();
             //Swagger
@@ -148,7 +128,6 @@ namespace Api_Capa_de_Servicios
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("Services/swagger.json", "Api Servicios Integracion");
-               
                 c.InjectStylesheet("/Swagger/Ui/custom.css");
                // c.InjectJavascript("/swagger-ui/custom.js");
             });
